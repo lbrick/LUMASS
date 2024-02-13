@@ -1,0 +1,11 @@
+name: Build repo
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
+    runs-on: self-hosted
