@@ -4,10 +4,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy:
+  build:
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
       cancel-in-progress: true
     runs-on: self-hosted
     steps:
       - run: python --version
+      - uses: actions/checkout@v2
