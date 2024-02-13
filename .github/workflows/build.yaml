@@ -9,3 +9,5 @@ jobs:
       group: ${{ github.workflow }}-${{ github.ref }}
       cancel-in-progress: true
     runs-on: self-hosted
+    steps:
+      - run: python --version
