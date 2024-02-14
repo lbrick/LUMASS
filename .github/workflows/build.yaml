@@ -10,5 +10,5 @@ jobs:
       cancel-in-progress: true
     runs-on: self-hosted
     steps:
-      - run: python --version
+      - run: python3 --version
       - uses: actions/checkout@v2
