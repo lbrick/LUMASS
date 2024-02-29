@@ -27,9 +27,11 @@ INCLUDE_DIRECTORIES(
     ${NMVtk_SOURCE_DIR}
     ${gui_SOURCE_DIR}
     ${bmi_SOURCE_DIR}
+    ${lumass_SOURCE_DIR}
+    ${lumass_SOURCE_DIR}/bmi
     ${shared_SOURCE_DIR}
     ${lumass_BINARY_DIR}
-    ${lumass_SOURCE_DIR}
+    ${lumass_BINARY_DIR}/bmi
     ${GDALRATImageIO_SOURCE_DIR}
     ${GDALRATImageIO_BINARY_DIR}
     ${OTBSupplCore_SOURCE_DIR}
@@ -91,7 +93,10 @@ set(ENGINE_LINKLIBS Qt5Core Qt5Sql Qt5Xml
         ${MPI_CXX_LIBRARIES}
         LumassBMI
         NMNetCDFIO
-        NMModFrameCore ${MFW_WRAPPER_NAMES}
+        NMOTBSupplFilters
+        NMOTBSupplCore
+        NMModFrameCore
+        ${MFW_WRAPPER_NAMES}
         ${LUMASS_ENGINE_VTK_LIBRARIES} ${PostgreSQL_LIBRARIES}
         ${LPSOLVE_LIBRARY}
         ${YAML_CPP_LIBRARIES}

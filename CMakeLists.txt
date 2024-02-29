@@ -241,11 +241,16 @@ if(WIN32)
     endif()
 endif()
 
-FIND_PACKAGE(LUMASSOTB)
-if(NOT OTB_FOUND)
-  message(FATAL_ERROR "You have to install Orfeo Toolbox prior to compiling LUMASS!")
-endif(NOT OTB_FOUND)
+IF(NOT OTB_DIR)
+    FIND_PACKAGE(LUMASSOTB)
+    if(NOT OTB_FOUND)
+      message(FATAL_ERROR "You have to install Orfeo Toolbox prior to compiling LUMASS!")
+    endif(NOT OTB_FOUND)
+ELSE()
+    include(${OTB_DIR}/OTBConfig.cmake)
+ENDIF()
 
+SET(LUMASS_ITK_VERSION "${ITK_VERSION_MAJOR}.${ITK_VERSION_MINOR}.${ITK_VERSION_PATCH}")
 SET(LUMASS_OTB_VERSION "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
 SET(LUMASS_OTB_LIB_VERSION "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
 if (LUMASS_OTB_VERSION VERSION_LESS "6.4")
@@ -255,13 +260,13 @@ else()
 endif ()
 
 message(STATUS "ITK_VERSION: ${LUMASS_ITK_VERSION}")
-message(STATUS "ITK_LIBRARY_DIRS: ${ITK_LIBRARY_DIRS}")
+#message(STATUS "ITK_LIBRARY_DIRS: ${ITK_LIBRARY_DIRS}")
 #message(STATUS "ITK_INCLUDE_DIRS: ${ITK_INCLUDE_DIRS}")
 #message(STATUS "ITK_LIBRARIES: ${ITK_LIBRARIES}")
-message(STATUS "ITK_LINK_DIR: ${ITK_LINK_DIR}")
+#message(STATUS "ITK_LINK_DIR: ${ITK_LINK_DIR}")
 message(STATUS "OTB_VERSION: ${LUMASS_OTB_VERSION}")
 message(STATUS "OTB_LIBRARY_DIRS: ${OTB_LIBRARY_DIRS}")
-#message(STATUS "OTB_INCLUDE_DIRS: ${OTB_INCLUDE_DIRS}")
+message(STATUS "OTB_INCLUDE_DIRS: ${OTB_INCLUDE_DIRS}")
 #message(STATUS "OTB_LIBRARIES: ${OTB_LIBRARIES}")
 message(STATUS "OTB_LINK_DIR: ${OTB_LINK_DIR}")
 
@@ -506,15 +511,16 @@ endif(PYTHONSUPPORT)
 #====================================================================
 # ask for YAML library and header dir
 #====================================================================
-    find_package(yaml-cpp
-        HINTS
-            /usr/lib/x86_64-linux-gnu/cmake/yaml-cpp/yaml-cpp-cdonfig.cmake
-                    c:/opt/yaml-cpp/yaml-cpp-config.cmake
-        PATHS
-            /usr/lib/x86_64-linux-gnu/cmake
-            /usr/lib/cmake
-                c:/opt/yaml-cpp
-    )
+# the yaml-cpp-config.cmake does not work properly, so we make do without it for now
+#find_package(yaml-cpp
+#    HINTS
+#        /usr/lib/x86_64-linux-gnu/cmake/yaml-cpp/yaml-cpp-config.cmake
+#                c:/opt/yaml-cpp/yaml-cpp-config.cmake
+#    PATHS
+#        /usr/lib/x86_64-linux-gnu/cmake
+#        /usr/lib/cmake
+#            c:/opt/yaml-cpp
+#)
 
 if (NOT YAML_CPP_CMAKE_DIR)
         set(YAML_CPP_CMAKE_DIR "YAML_CPP_CMAKE_DIR-NOTFOUND" CACHE STRING "Please specify the path of yaml-cpp-config.cmake" )
@@ -522,6 +528,7 @@ if (NOT YAML_CPP_CMAKE_DIR)
 else()
         include(${YAML_CPP_CMAKE_DIR}/yaml-cpp-config-version.cmake)
         SET(LUMASS_yaml_version "${PACKAGE_VERSION}")
+        set(YAML_CPP_LIBRARIES "yaml-cpp")
         message(STATUS "yaml-cpp version: ${LUMASS_yaml_version}")
 endif()
 
